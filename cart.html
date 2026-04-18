@@ -1,114 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Zi | Checkout</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap');
-        :root { --zi-yellow: #FFC107; --zi-dark: #0F0F0F; }
-        html, body, * { cursor: url('https://cdn-icons-png.flaticon.com/24/1046/1046761.png'), auto !important; }
-        body { font-family: 'Inter', sans-serif; background-color: #FAF9F6; }
-        .bg-grid { background-image: linear-gradient(#f0e9d5 1px, transparent 1px), linear-gradient(90deg, #f0e9d5 1px, transparent 1px); background-size: 40px 40px; }
-        .font-heading { font-family: 'Archivo Black', sans-serif; }
-        
-        /* Toggle Switch Styling */
-        .switch-toggle { display: flex; background: #eee; padding: 4px; border-radius: 20px; position: relative; }
-        .switch-btn { flex: 1; padding: 10px; border-radius: 16px; font-weight: 900; z-index: 10; transition: 0.3s; }
-        .switch-btn.active { background: var(--zi-yellow); color: black; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    </style>
-</head>
-<body class="bg-grid min-h-screen">
+// --- CART & CHECKOUT LOGIC ---
+let orderMethod = 'pickup';
 
-    <nav class="flex justify-between items-center px-10 py-6 glass sticky top-0 z-50">
-        <a href="index.html" class="text-4xl font-heading tracking-tighter uppercase">ZI<span class="text-yellow-500">.</span></a>
-        <a href="menu.html" class="font-bold text-xs uppercase tracking-widest border-b-2 border-black">Back to Menu</a>
-    </nav>
+function loadCart() {
+    const cartData = localStorage.getItem('zi_cart');
+    const summaryDiv = document.getElementById('summary-items');
+    const totalEl = document.getElementById('final-total');
+    
+    // Check if cart is empty
+    if (!cartData || JSON.parse(cartData).length === 0) {
+        summaryDiv.innerHTML = '<p class="text-zinc-500 italic uppercase text-[10px] py-4 text-center border-2 border-dashed border-zinc-800 rounded-xl">Your bag is empty.</p>';
+        totalEl.innerText = 'AED 0';
+        return;
+    }
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <h1 class="text-5xl font-heading uppercase italic tracking-tighter mb-10">Review <span class="text-yellow-500">Order</span></h1>
+    const cart = JSON.parse(cartData);
+    let total = 0;
+    summaryDiv.innerHTML = ''; 
 
-        <div class="grid md:grid-cols-2 gap-12">
-            <div class="space-y-8">
-                <div class="bg-white p-8 rounded-[40px] shadow-xl border border-zinc-100">
-                    <h3 class="font-heading text-xl uppercase mb-6 italic">Order Method</h3>
-                    <div class="switch-toggle">
-                        <button onclick="setMethod('pickup')" id="btn-pickup" class="switch-btn active uppercase text-xs">Pick Up</button>
-                        <button onclick="setMethod('delivery')" id="btn-delivery" class="switch-btn uppercase text-xs">Delivery</button>
-                    </div>
-
-                    <div id="location-box" class="mt-8 hidden animate-pulse">
-                        <label class="block font-black uppercase text-[10px] tracking-widest mb-2">Delivery Area</label>
-                        <select id="area-select" class="w-full p-4 rounded-2xl bg-zinc-100 border-2 border-transparent focus:border-yellow-400 outline-none font-bold">
-                            <option value="">Select your area...</option>
-                            <option value="rashidiyah">Rashidiyah (Local Delivery)</option>
-                            <option value="other">Outside Rashidiyah (Not Available)</option>
-                        </select>
-                        <p class="text-[10px] text-zinc-400 mt-2 font-bold uppercase tracking-tighter">Note: We only deliver within Rashidiyah to ensure maximum crunch.</p>
-                    </div>
-
-                    <div id="pickup-box" class="mt-8">
-                        <p class="font-bold text-sm text-zinc-600 italic">📍 Zi Branch - Rashidiyah Main St.</p>
-                        <p class="text-[10px] uppercase text-zinc-400 mt-1">Ready for collection in 15-20 mins</p>
-                    </div>
+    // Build the list dynamically
+    cart.forEach((item, index) => {
+        total += item.price;
+        summaryDiv.innerHTML += `
+            <div class="flex justify-between items-center font-bold text-sm uppercase mb-3 bg-zinc-900 p-3 rounded-xl border border-zinc-800">
+                <span>${item.name}</span>
+                <div class="flex items-center gap-4">
+                    <span class="text-yellow-400">AED ${item.price}</span>
+                    <button onclick="removeItem(${index})" class="bg-red-500/10 text-red-500 px-2 py-1 rounded-md text-[9px] hover:bg-red-500 hover:text-white transition">Remove</button>
                 </div>
             </div>
+        `;
+    });
 
-            <div class="bg-black text-white p-8 rounded-[40px] shadow-2xl flex flex-col justify-between">
-                <div>
-                    <h3 class="font-heading text-xl uppercase mb-6 italic text-yellow-400">Summary</h3>
-                    <div id="summary-items" class="space-y-4">
-                        <div class="flex justify-between font-bold text-sm uppercase">
-                            <span>Value Box x 1</span>
-                            <span>AED 34</span>
-                        </div>
-                    </div>
-                </div>
+    totalEl.innerText = `AED ${total}`;
+}
 
-                <div class="mt-12 border-t border-zinc-800 pt-6">
-                    <div class="flex justify-between font-heading text-2xl uppercase italic mb-6">
-                        <span>Total</span>
-                        <span id="final-total">AED 34</span>
-                    </div>
-                    <button onclick="completeOrder()" class="w-full bg-yellow-500 text-black py-5 rounded-2xl font-black uppercase tracking-tighter hover:scale-105 transition">Send to WhatsApp</button>
-                </div>
-            </div>
-        </div>
-    </main>
+function removeItem(index) {
+    let cart = JSON.parse(localStorage.getItem('zi_cart'));
+    cart.splice(index, 1); 
+    localStorage.setItem('zi_cart', JSON.stringify(cart));
+    loadCart(); // Refresh the UI
+}
 
-    <script>
-        let orderMethod = 'pickup';
+function setMethod(method) {
+    orderMethod = method;
+    const pickupBtn = document.getElementById('btn-pickup');
+    const deliveryBtn = document.getElementById('btn-delivery');
+    const pickupBox = document.getElementById('pickup-box');
+    const locationBox = document.getElementById('location-box');
 
-        function setMethod(method) {
-            orderMethod = method;
-            const pickupBtn = document.getElementById('btn-pickup');
-            const deliveryBtn = document.getElementById('btn-delivery');
-            const pickupBox = document.getElementById('pickup-box');
-            const locationBox = document.getElementById('location-box');
+    if (method === 'delivery') {
+        deliveryBtn.classList.add('active');
+        pickupBtn.classList.remove('active');
+        locationBox.classList.remove('hidden');
+        pickupBox.classList.add('hidden');
+    } else {
+        pickupBtn.classList.add('active');
+        deliveryBtn.classList.remove('active');
+        locationBox.classList.add('hidden');
+        pickupBox.classList.remove('hidden');
+    }
+}
 
-            if (method === 'delivery') {
-                deliveryBtn.classList.add('active');
-                pickupBtn.classList.remove('active');
-                locationBox.classList.remove('hidden');
-                pickupBox.classList.add('hidden');
-            } else {
-                pickupBtn.classList.add('active');
-                deliveryBtn.classList.remove('active');
-                locationBox.classList.add('hidden');
-                pickupBox.classList.remove('hidden');
-            }
-        }
+function completeOrder() {
+    const cartData = localStorage.getItem('zi_cart');
+    if (!cartData || JSON.parse(cartData).length === 0) {
+        alert("Your bag is empty! Add some crunch first.");
+        return;
+    }
 
-        function completeOrder() {
-            const area = document.getElementById('area-select').value;
-            if (orderMethod === 'delivery' && area !== 'rashidiyah') {
-                alert("Zi Delivery is currently exclusive to Rashidiyah to ensure food quality! Please choose 'Pick Up' or change area.");
-                return;
-            }
-            alert("Redirecting to Zi WhatsApp with your order details...");
-            // Logic to build WhatsApp link goes here
-        }
-    </script>
-</body>
-</html>
+    const area = document.getElementById('area-select').value;
+    if (orderMethod === 'delivery' && area !== 'rashidiyah') {
+        alert("Zi Delivery is currently exclusive to Rashidiyah to ensure the Gold Standard crunch! Please choose 'Pick Up' or change your area.");
+        return;
+    }
+    
+    alert("Order Confirmed! Redirecting to Zi Rashidiyah WhatsApp...");
+    localStorage.clear(); // Clear cart after successful order
+    window.location.href = "index.html"; 
+}
+
+// Initialize on Load
+window.onload = loadCart;
+
+// Chicken Cursor
+document.addEventListener('mousemove', (e) => {
+    const cursor = 'url(https://cdn-icons-png.flaticon.com/24/1046/1046761.png), auto';
+    document.body.style.cursor = cursor;
+});
