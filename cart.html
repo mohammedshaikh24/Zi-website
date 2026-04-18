@@ -19,11 +19,15 @@
         .switch-toggle { display: flex; background: #eee; padding: 4px; border-radius: 20px; }
         .switch-btn { flex: 1; padding: 10px; border-radius: 16px; font-weight: 900; transition: 0.3s; }
         .switch-btn.active { background: var(--zi-yellow); color: black; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        /* Custom scrollbar for the cart items */
+        #summary-items::-webkit-scrollbar { width: 4px; }
+        #summary-items::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-grid min-h-screen">
 
-    <nav class="flex justify-between items-center px-10 py-6 glass sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-200">
+    <nav class="flex justify-between items-center px-10 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-200">
         <a href="index.html" class="text-4xl font-heading tracking-tighter uppercase">ZI<span class="text-yellow-500">.</span></a>
         <a href="menu.html" class="font-bold text-xs uppercase tracking-widest border-b-2 border-black hover:text-yellow-600 transition">Back to Menu</a>
     </nav>
@@ -44,26 +48,26 @@
                     <div id="location-box" class="hidden space-y-4">
                         <label class="block font-black uppercase text-[10px] tracking-widest">Select Area</label>
                         <select id="area-select" class="w-full p-4 rounded-2xl bg-zinc-100 border-2 border-transparent focus:border-yellow-400 outline-none font-bold transition">
-                            <option value="">Choose your neighborhood...</option>
-                            <option value="rashidiyah">Umm ramool (Local Delivery)</option>
-                            <option value="other">Outside Umm ramool (Not Available)</option>
+                            <option value="">Choose neighborhood...</option>
+                            <option value="rashidiyah">Rashidiyah (Local Delivery)</option>
+                            <option value="other">Outside Rashidiyah</option>
                         </select>
                         <div class="bg-yellow-50 p-4 rounded-2xl border border-yellow-100">
-                            <p class="text-[10px] text-yellow-700 font-bold uppercase leading-tight">📍 We only deliver within Rashidiyah to maintain that 10/10 Zi crunch.</p>
+                            <p class="text-[10px] text-yellow-700 font-bold uppercase leading-tight">📍 We only deliver within Rashidiyah to maintain the Gold Standard crunch.</p>
                         </div>
                     </div>
 
                     <div id="pickup-box" class="bg-zinc-50 p-6 rounded-3xl border border-zinc-100">
                         <p class="font-bold text-sm text-black uppercase italic">Zi Rashidiyah Main Branch</p>
-                        <p class="text-[10px] uppercase text-zinc-400 mt-2 tracking-widest leading-relaxed">Rashidiyah Main St, Dubai<br>Ready for pickup in 15-20 mins</p>
+                        <p class="text-[10px] uppercase text-zinc-400 mt-2 tracking-widest">Ready for collection in 15-20 mins</p>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-black text-white p-10 rounded-[50px] shadow-2xl flex flex-col justify-between min-h-[400px]">
+            <div class="bg-black text-white p-10 rounded-[50px] shadow-2xl flex flex-col justify-between min-h-[500px]">
                 <div>
                     <h3 class="font-heading text-2xl uppercase mb-8 italic text-yellow-400 border-b border-zinc-800 pb-4">Your Items</h3>
-                    <div id="summary-items" class="space-y-4 max-h-[300px] overflow-y-auto pr-2">
+                    <div id="summary-items" class="space-y-4 max-h-[350px] overflow-y-auto pr-2">
                         </div>
                 </div>
 
@@ -84,7 +88,6 @@
     <script>
         let orderMethod = 'pickup';
 
-        // 1. Load data from localStorage
         function loadCart() {
             const cartData = localStorage.getItem('zi_cart');
             const summaryDiv = document.getElementById('summary-items');
@@ -92,9 +95,11 @@
             
             if (!cartData || JSON.parse(cartData).length === 0) {
                 summaryDiv.innerHTML = `
-                    <div class="text-center py-10">
-                        <p class="text-zinc-500 font-bold uppercase text-xs tracking-widest italic">Bag is currently empty</p>
-                        <a href="menu.html" class="text-yellow-400 text-[10px] font-black uppercase mt-4 inline-block underline">Go add some crunch</a>
+                    <div class="text-center py-20">
+                        <p class="text-zinc-500 font-bold uppercase text-xs tracking-widest italic mb-6">Bag is currently empty</p>
+                        <a href="menu.html" class="bg-yellow-400 text-black px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-tighter hover:bg-white transition-all inline-block cursor-pointer">
+                            Go add some crunch
+                        </a>
                     </div>
                 `;
                 totalEl.innerText = 'AED 0';
@@ -108,12 +113,12 @@
             cart.forEach((item, index) => {
                 total += item.price;
                 summaryDiv.innerHTML += `
-                    <div class="flex justify-between items-center group">
+                    <div class="flex justify-between items-center group bg-zinc-900/50 p-4 rounded-2xl border border-zinc-800">
                         <div class="flex flex-col">
                             <span class="font-black text-sm uppercase italic tracking-tight">${item.name}</span>
-                            <span class="text-[10px] text-zinc-500 uppercase font-bold">AED ${item.price}</span>
+                            <span class="text-[10px] text-yellow-500 uppercase font-bold">AED ${item.price}</span>
                         </div>
-                        <button onclick="removeItem(${index})" class="text-[10px] font-black uppercase text-red-500 bg-red-500/10 px-3 py-1 rounded-full hover:bg-red-500 hover:text-white transition">Remove</button>
+                        <button onclick="removeItem(${index})" class="text-[9px] font-black uppercase text-red-500 bg-red-500/10 px-3 py-1 rounded-full hover:bg-red-500 hover:text-white transition">Remove</button>
                     </div>
                 `;
             });
@@ -121,7 +126,6 @@
             totalEl.innerText = `AED ${total}`;
         }
 
-        // 2. Remove items
         function removeItem(index) {
             let cart = JSON.parse(localStorage.getItem('zi_cart'));
             cart.splice(index, 1); 
@@ -129,7 +133,6 @@
             loadCart(); 
         }
 
-        // 3. Toggle Pickup/Delivery
         function setMethod(method) {
             orderMethod = method;
             const pickupBtn = document.getElementById('btn-pickup');
@@ -150,7 +153,6 @@
             }
         }
 
-        // 4. Final Order Button
         function completeOrder() {
             const cartData = localStorage.getItem('zi_cart');
             if (!cartData || JSON.parse(cartData).length === 0) {
@@ -165,23 +167,19 @@
                     return;
                 }
                 if (area !== 'rashidiyah') {
-                    alert("⚠️ Zi Delivery is exclusive to Rashidiyah to ensure the food stays hot and crunchy. Please select 'Pick Up' or change area.");
+                    alert("⚠️ Zi Delivery is currently exclusive to Rashidiyah to ensure the Gold Standard crunch. Try Pick Up!");
                     return;
                 }
             }
             
-            alert("Order Success! Taking you to Zi WhatsApp...");
-            localStorage.removeItem('zi_cart'); // Clear after order
+            alert("Order Success! Taking you to Zi Rashidiyah WhatsApp...");
+            localStorage.removeItem('zi_cart');
             window.location.href = "index.html"; 
         }
 
-        // Initialize
         window.onload = loadCart;
-
-        // Forced Cursor
         document.addEventListener('mousemove', (e) => {
-            const cursor = 'url(https://cdn-icons-png.flaticon.com/24/1046/1046761.png), auto';
-            document.body.style.cursor = cursor;
+            document.body.style.cursor = 'url(https://cdn-icons-png.flaticon.com/24/1046/1046761.png), auto';
         });
     </script>
 </body>
