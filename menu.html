@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Zi Menu | Explore the Crunch</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap');
+        :root { --zi-yellow: #FFC107; --zi-dark: #0F0F0F; }
+
+        html, body, * { cursor: url('https://cdn-icons-png.flaticon.com/24/1046/1046761.png'), auto !important; }
+        body { font-family: 'Inter', sans-serif; background-color: #FAF9F6; scroll-behavior: smooth; }
+        .bg-grid { background-image: linear-gradient(#f0e9d5 1px, transparent 1px), linear-gradient(90deg, #f0e9d5 1px, transparent 1px); background-size: 40px 40px; }
+        .font-heading { font-family: 'Archivo Black', sans-serif; }
+
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
+        .blob-1 { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+        .blob-2 { border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%; }
+        .blob-3 { border-radius: 80% 20% 50% 50% / 50% 50% 50% 20%; }
+        
+        .category-btn.active { background: var(--zi-yellow); color: black; border-color: black; }
+        
+        /* Subtle animation for when items are added */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .cart-pop { animation: pop 0.3s ease-out; }
+    </style>
+</head>
+<body class="bg-grid min-h-screen">
+
+    <nav class="flex justify-between items-center px-10 py-6 sticky top-0 z-50 glass">
+        <a href="index.html" class="text-4xl font-heading tracking-tighter uppercase">ZI<span class="text-yellow-500">.</span></a>
+        <div class="flex gap-6 font-bold text-xs uppercase tracking-widest items-center">
+            <a href="index.html" class="hover:text-yellow-600 transition">Home</a>
+            <div class="bg-black text-white px-5 py-2 rounded-full flex items-center gap-2">
+                <span>Cart</span>
+                <span id="cart-count" class="bg-white text-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-black transition-all">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="max-w-7xl mx-auto px-6 py-20">
+        <div class="mb-16">
+            <h1 class="text-6xl font-heading uppercase italic tracking-tighter">The Full <span class="text-yellow-500">Crunch</span></h1>
+            
+            <div class="flex flex-wrap gap-4 mt-10">
+                <button class="category-btn active px-8 py-3 rounded-full font-black uppercase text-sm border-2 border-transparent transition">All Items</button>
+                <button class="category-btn bg-white border-2 border-zinc-200 px-8 py-3 rounded-full font-black uppercase text-sm text-zinc-400 hover:border-black hover:text-black transition">Broasted</button>
+                <button class="category-btn bg-white border-2 border-zinc-200 px-8 py-3 rounded-full font-black uppercase text-sm text-zinc-400 hover:border-black hover:text-black transition">Burgers</button>
+                <button class="category-btn bg-white border-2 border-zinc-200 px-8 py-3 rounded-full font-black uppercase text-sm text-zinc-400 hover:border-black hover:text-black transition">Wraps</button>
+                <button class="category-btn bg-white border-2 border-zinc-200 px-8 py-3 rounded-full font-black uppercase text-sm text-zinc-400 hover:border-black hover:text-black transition">Mojitos</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-[50px] shadow-xl border border-zinc-100 group transition hover:-translate-y-2">
+                <div class="bg-yellow-400/10 blob-1 p-6 mb-6">
+                    <img src="https://images.unsplash.com/photo-1562967914-608f82629710?w=600" class="w-full h-48 object-cover rounded-3xl">
+                </div>
+                <h3 class="font-heading text-2xl uppercase italic">Value Box</h3>
+                <p class="text-zinc-500 text-sm mt-2 font-medium">2 pcs chicken, 2 strips, fries & drink.</p>
+                <div class="mt-6 flex justify-between items-center">
+                    <span class="text-3xl font-black">AED 34</span>
+                    <button onclick="addToCart()" class="bg-black text-white px-6 py-3 rounded-xl font-bold uppercase text-xs hover:bg-yellow-500 hover:text-black transition">Add</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-[50px] shadow-xl border border-zinc-100 group transition hover:-translate-y-2">
+                <div class="bg-orange-400/10 blob-2 p-6 mb-6">
+                    <img src="https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?w=600" class="w-full h-48 object-cover rounded-3xl">
+                </div>
+                <h3 class="font-heading text-2xl uppercase italic">Dinner Meal</h3>
+                <p class="text-zinc-500 text-sm mt-2 font-medium">3 pieces chicken, fries & drink.</p>
+                <div class="mt-6 flex justify-between items-center">
+                    <span class="text-3xl font-black">AED 34</span>
+                    <button onclick="addToCart()" class="bg-black text-white px-6 py-3 rounded-xl font-bold uppercase text-xs hover:bg-yellow-500 hover:text-black transition">Add</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-[50px] shadow-xl border border-zinc-100 group transition hover:-translate-y-2">
+                <div class="bg-red-400/10 blob-3 p-6 mb-6">
+                    <img src="https://images.unsplash.com/photo-1513185158878-8d8c196b8f88?w=600" class="w-full h-48 object-cover rounded-3xl">
+                </div>
+                <h3 class="font-heading text-2xl uppercase italic">Mighty Zinger</h3>
+                <p class="text-zinc-500 text-sm mt-2 font-medium">Double stacked spicy fillet.</p>
+                <div class="mt-6 flex justify-between items-center">
+                    <span class="text-3xl font-black">AED 28</span>
+                    <button onclick="addToCart()" class="bg-black text-white px-6 py-3 rounded-xl font-bold uppercase text-xs hover:bg-yellow-500 hover:text-black transition">Add</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-[50px] shadow-xl border border-zinc-100 group transition hover:-translate-y-2">
+                <div class="bg-purple-400/10 blob-1 p-6 mb-6">
+                    <img src="https://images.unsplash.com/photo-1546173159-315724a31696?w=600" class="w-full h-48 object-cover rounded-3xl">
+                </div>
+                <h3 class="font-heading text-2xl uppercase italic">Vimto Berry</h3>
+                <p class="text-zinc-500 text-sm mt-2 font-medium">Chilled summer refresher.</p>
+                <div class="mt-6 flex justify-between items-center">
+                    <span class="text-3xl font-black">AED 14</span>
+                    <button onclick="addToCart()" class="bg-black text-white px-6 py-3 rounded-xl font-bold uppercase text-xs hover:bg-yellow-500 hover:text-black transition">Add</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let count = 0;
+        const countEl = document.getElementById('cart-count');
+
+        function addToCart() {
+            count++;
+            countEl.innerText = count;
+            countEl.classList.add('cart-pop');
+            setTimeout(() => countEl.classList.remove('cart-pop'), 3000);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const cursor = 'url(https://cdn-icons-png.flaticon.com/24/1046/1046761.png), auto';
+            document.body.style.cursor = cursor;
+        });
+    </script>
+</body>
+</html>
