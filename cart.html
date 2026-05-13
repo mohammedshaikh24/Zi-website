@@ -9,7 +9,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap');
         :root { --zi-yellow: #FFC107; --zi-dark: #0F0F0F; }
 
-        /* --- FORCED CHICKEN CURSOR --- */
         html, body, * { cursor: url('https://cdn-icons-png.flaticon.com/24/1046/1046761.png'), auto !important; }
 
         body { font-family: 'Inter', sans-serif; background-color: #FAF9F6; min-h-screen; }
@@ -20,15 +19,16 @@
         .switch-btn { flex: 1; padding: 10px; border-radius: 16px; font-weight: 900; transition: 0.3s; }
         .switch-btn.active { background: var(--zi-yellow); color: black; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
-        /* Custom scrollbar for the cart items */
         #summary-items::-webkit-scrollbar { width: 4px; }
         #summary-items::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-grid min-h-screen">
 
-    <nav class="flex justify-between items-center px-10 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-200">
-        <a href="index.html" class="text-4xl font-heading tracking-tighter uppercase">ZI<span class="text-yellow-500">.</span></a>
+    <nav class="flex justify-between items-center px-10 py-4 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-200">
+        <a href="index.html" class="flex items-center gap-2">
+            <img src="image_1f004f.png" alt="Zi Logo" class="h-12 w-12 rounded-2xl shadow-sm object-cover border border-yellow-200">
+        </a>
         <a href="menu.html" class="font-bold text-xs uppercase tracking-widest border-b-2 border-black hover:text-yellow-600 transition">Back to Menu</a>
     </nav>
 
@@ -49,16 +49,16 @@
                         <label class="block font-black uppercase text-[10px] tracking-widest">Select Area</label>
                         <select id="area-select" class="w-full p-4 rounded-2xl bg-zinc-100 border-2 border-transparent focus:border-yellow-400 outline-none font-bold transition">
                             <option value="">Choose neighborhood...</option>
-                            <option value="rashidiyah">Rashidiyah (Local Delivery)</option>
-                            <option value="other">Outside Rashidiyah</option>
+                            <option value="umm_ramool">Umm Ramool (Local Delivery)</option>
+                            <option value="other">Outside Umm Ramool</option>
                         </select>
                         <div class="bg-yellow-50 p-4 rounded-2xl border border-yellow-100">
-                            <p class="text-[10px] text-yellow-700 font-bold uppercase leading-tight">📍 We only deliver within Rashidiyah to maintain the Gold Standard crunch.</p>
+                            <p class="text-[10px] text-yellow-700 font-bold uppercase leading-tight">📍 Delivery is exclusively for Umm Ramool to maintain the Gold Standard crunch.</p>
                         </div>
                     </div>
 
                     <div id="pickup-box" class="bg-zinc-50 p-6 rounded-3xl border border-zinc-100">
-                        <p class="font-bold text-sm text-black uppercase italic">Zi Rashidiyah Main Branch</p>
+                        <p class="font-bold text-sm text-black uppercase italic">Zi Umm Ramool Branch</p>
                         <p class="text-[10px] uppercase text-zinc-400 mt-2 tracking-widest">Ready for collection in 15-20 mins</p>
                     </div>
                 </div>
@@ -68,7 +68,8 @@
                 <div>
                     <h3 class="font-heading text-2xl uppercase mb-8 italic text-yellow-400 border-b border-zinc-800 pb-4">Your Items</h3>
                     <div id="summary-items" class="space-y-4 max-h-[350px] overflow-y-auto pr-2">
-                        </div>
+                        <!-- Items injected here -->
+                    </div>
                 </div>
 
                 <div class="mt-12 pt-8 border-t border-zinc-800">
@@ -77,7 +78,7 @@
                         <span id="final-total" class="text-yellow-400">AED 0</span>
                     </div>
                     <button onclick="completeOrder()" class="w-full bg-yellow-400 text-black py-6 rounded-2xl font-black uppercase tracking-tighter text-lg hover:bg-white transition-all transform hover:scale-[1.02]">
-                        Complete Order
+                        Send to WhatsApp
                     </button>
                 </div>
             </div>
@@ -160,27 +161,47 @@
                 return;
             }
 
+            const cart = JSON.parse(cartData);
+            let total = 0;
+            
+            // Build the WhatsApp Message
+            let message = "🍗 *NEW ZI ORDER* 🍗\n\n";
+
             if (orderMethod === 'delivery') {
                 const area = document.getElementById('area-select').value;
-                if (!area) {
-                    alert("Please select a delivery area.");
+                if (!area) { alert("Please select a delivery area."); return; }
+                if (area !== 'umm_ramool') {
+                    alert("⚠️ Zi Delivery is currently exclusive to Umm Ramool to ensure the Gold Standard crunch. Try Pick Up!");
                     return;
                 }
-                if (area !== 'rashidiyah') {
-                    alert("⚠️ Zi Delivery is currently exclusive to Rashidiyah to ensure the Gold Standard crunch. Try Pick Up!");
-                    return;
-                }
+                message += "*Method:* Delivery (Umm Ramool)\n\n";
+            } else {
+                message += "*Method:* Pick Up\n\n";
             }
+
+            message += "*Items:*\n";
+            cart.forEach((item) => {
+                message += `- ${item.name} (AED ${item.price})\n`;
+                total += item.price;
+            });
+
+            message += `\n*Total:* AED ${total}\n`;
+            message += "\nWaiting for confirmation!";
+
+            // Encode the message for the URL
+            const encodedMessage = encodeURIComponent(message);
             
-            alert("Order Success! Taking you to Zi Rashidiyah WhatsApp...");
+            // PUT YOUR RESTAURANT WHATSAPP NUMBER HERE (Include Country Code, no + or spaces)
+            const whatsappNumber = "971501234567"; // Example: 971501234567
+
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            // Clear the cart and redirect the user
             localStorage.removeItem('zi_cart');
-            window.location.href = "index.html"; 
+            window.location.href = whatsappURL; 
         }
 
         window.onload = loadCart;
-        document.addEventListener('mousemove', (e) => {
-            document.body.style.cursor = 'url(https://cdn-icons-png.flaticon.com/24/1046/1046761.png), auto';
-        });
     </script>
 </body>
 </html>
