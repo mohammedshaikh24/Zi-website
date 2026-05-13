@@ -8,26 +8,23 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap');
         :root { --zi-yellow: #FFC107; --zi-dark: #0F0F0F; }
-
         html, body, * { cursor: url('https://cdn-icons-png.flaticon.com/24/1046/1046761.png'), auto !important; }
-
         body { font-family: 'Inter', sans-serif; background-color: #FAF9F6; min-h-screen; }
         .bg-grid { background-image: linear-gradient(#f0e9d5 1px, transparent 1px), linear-gradient(90deg, #f0e9d5 1px, transparent 1px); background-size: 40px 40px; }
         .font-heading { font-family: 'Archivo Black', sans-serif; }
-        
         .switch-toggle { display: flex; background: #eee; padding: 4px; border-radius: 20px; }
         .switch-btn { flex: 1; padding: 10px; border-radius: 16px; font-weight: 900; transition: 0.3s; }
         .switch-btn.active { background: var(--zi-yellow); color: black; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
         #summary-items::-webkit-scrollbar { width: 4px; }
         #summary-items::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-grid min-h-screen">
 
+    <!-- NAV WITH LOGO.JPEG -->
     <nav class="flex justify-between items-center px-10 py-4 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-200">
         <a href="index.html" class="flex items-center gap-2">
-            <img src="image_1f004f.png" alt="Zi Logo" class="h-12 w-12 rounded-2xl shadow-sm object-cover border border-yellow-200">
+            <img src="logo.jpeg" alt="Zi Logo" class="h-12 w-12 rounded-2xl shadow-sm object-cover border border-yellow-200">
         </a>
         <a href="menu.html" class="font-bold text-xs uppercase tracking-widest border-b-2 border-black hover:text-yellow-600 transition">Back to Menu</a>
     </nav>
@@ -164,7 +161,6 @@
             const cart = JSON.parse(cartData);
             let total = 0;
             
-            // Build the WhatsApp Message
             let message = "🍗 *NEW ZI ORDER* 🍗\n\n";
 
             if (orderMethod === 'delivery') {
@@ -184,19 +180,15 @@
                 message += `- ${item.name} (AED ${item.price})\n`;
                 total += item.price;
             });
-
+            
             message += `\n*Total:* AED ${total}\n`;
             message += "\nWaiting for confirmation!";
 
-            // Encode the message for the URL
             const encodedMessage = encodeURIComponent(message);
-            
-            // PUT YOUR RESTAURANT WHATSAPP NUMBER HERE (Include Country Code, no + or spaces)
-            const whatsappNumber = "971501234567"; // Example: 971501234567
+            const whatsappNumber = "971501234567"; // CHANGE THIS TO YOUR ACTUAL WHATSAPP NUMBER
 
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
-            // Clear the cart and redirect the user
             localStorage.removeItem('zi_cart');
             window.location.href = whatsappURL; 
         }
