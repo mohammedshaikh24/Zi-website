@@ -8,28 +8,22 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap');
         :root { --zi-yellow: #FFC107; --zi-dark: #0F0F0F; }
-
-        /* --- FORCED CHICKEN CURSOR --- */
         html, body, * { cursor: url('https://cdn-icons-png.flaticon.com/24/1046/1046761.png'), auto !important; }
-        
         body { font-family: 'Inter', sans-serif; background-color: #FAF9F6; scroll-behavior: smooth; }
         .bg-grid { background-image: linear-gradient(#f0e9d5 1px, transparent 1px), linear-gradient(90deg, #f0e9d5 1px, transparent 1px); background-size: 40px 40px; }
         .font-heading { font-family: 'Archivo Black', sans-serif; }
-
         .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .filter-btn.active { background-color: var(--zi-yellow) !important; color: black !important; border-color: black !important; }
-
         @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
         .cart-pop { animation: pop 0.3s ease-out; }
     </style>
 </head>
 <body class="bg-grid min-h-screen pb-20">
 
-    <!-- NAV -->
+    <!-- NAV WITH LOGO.JPEG -->
     <nav class="flex justify-between items-center px-10 py-4 sticky top-0 z-50 glass">
-        <!-- NEW LOGO -->
         <a href="index.html" class="flex items-center gap-2">
-            <img src="image_1f004f.png" alt="Zi Logo" class="h-12 w-12 rounded-2xl shadow-sm object-cover border border-yellow-200">
+            <img src="logo.jpeg" alt="Zi Logo" class="h-12 w-12 rounded-2xl shadow-sm object-cover border border-yellow-200">
         </a>
         <div class="flex gap-6 font-bold text-xs uppercase tracking-widest items-center">
             <a href="index.html" class="hover:text-yellow-600 transition">Home</a>
@@ -42,30 +36,27 @@
 
     <main class="max-w-7xl mx-auto px-6 pt-10">
         
-        <!-- HEADER WITH PHOTO 8 AS BACKGROUND -->
+        <!-- HEADER WITH 8.JPEG -->
         <header class="mb-12 relative rounded-[40px] overflow-hidden shadow-2xl">
             <div class="absolute inset-0 bg-black/60 z-10"></div>
-            <img src="8.jpg" alt="Zi Feast" class="absolute inset-0 w-full h-full object-cover z-0">
+            <img src="8.jpeg" alt="Zi Feast" class="absolute inset-0 w-full h-full object-cover z-0">
             <div class="relative z-20 p-16 md:p-24 text-center">
                 <h1 class="text-6xl md:text-8xl font-heading uppercase italic tracking-tighter text-white">THE FULL <span class="text-yellow-400">CRUNCH</span></h1>
                 <p class="text-white mt-4 font-bold uppercase tracking-widest text-sm">Always Fresh. Never Frozen.</p>
             </div>
         </header>
 
-        <!-- CATEGORY FILTER BUTTONS -->
         <div class="flex flex-wrap gap-4 mb-10 justify-center">
             <button onclick="filterItems('all', event)" class="filter-btn active px-8 py-3 rounded-full font-black uppercase text-sm border-2 border-black transition bg-yellow-400 text-black shadow-md">All Items</button>
             <button onclick="filterItems('broasted', event)" class="filter-btn bg-white border-2 border-zinc-200 px-8 py-3 rounded-full font-black uppercase text-sm text-zinc-400 hover:border-black hover:text-black transition shadow-sm">Broasted & Buckets</button>
             <button onclick="filterItems('burgers', event)" class="filter-btn bg-white border-2 border-zinc-200 px-8 py-3 rounded-full font-black uppercase text-sm text-zinc-400 hover:border-black hover:text-black transition shadow-sm">Burgers</button>
         </div>
 
-        <!-- MENU GRID -->
         <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             
-            <!-- Value Box -->
             <div class="item broasted bg-white p-6 rounded-[40px] shadow-lg border border-zinc-100 flex flex-col justify-between">
                 <div>
-                    <img src="5.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
+                    <img src="5.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
                     <h3 class="font-heading text-2xl uppercase italic">Value Box</h3>
                     <p class="text-xs text-zinc-500 font-bold mt-2 leading-relaxed">2 pieces chicken, 2 piece chicken strips, fries, coleslaw, bun & drink</p>
                 </div>
@@ -75,10 +66,9 @@
                 </div>
             </div>
 
-            <!-- Dinner Meal -->
             <div class="item broasted bg-white p-6 rounded-[40px] shadow-lg border border-zinc-100 flex flex-col justify-between">
                 <div>
-                    <img src="3.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
+                    <img src="3.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
                     <h3 class="font-heading text-2xl uppercase italic">Dinner Meal</h3>
                     <p class="text-xs text-zinc-500 font-bold mt-2 leading-relaxed">3 pieces chicken, fries, coleslaw, bun and a drink</p>
                 </div>
@@ -88,10 +78,9 @@
                 </div>
             </div>
 
-            <!-- Jumbo Meal -->
             <div class="item broasted bg-white p-6 rounded-[40px] shadow-lg border border-zinc-100 flex flex-col justify-between">
                 <div>
-                    <img src="3.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
+                    <img src="3.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
                     <h3 class="font-heading text-2xl uppercase italic">Jumbo Meal</h3>
                     <p class="text-xs text-zinc-500 font-bold mt-2 leading-relaxed">6 pieces chicken, fries, coleslaw, bun and 2 drinks</p>
                 </div>
@@ -101,10 +90,9 @@
                 </div>
             </div>
 
-            <!-- Mini Family Meal -->
             <div class="item broasted bg-white p-6 rounded-[40px] shadow-lg border border-zinc-100 flex flex-col justify-between">
                 <div>
-                    <img src="1.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
+                    <img src="1.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
                     <h3 class="font-heading text-2xl uppercase italic">Mini Family Meal</h3>
                     <p class="text-xs text-zinc-500 font-bold mt-2 leading-relaxed">9 pieces chicken, large fries, large coleslaw, bun and 1.5L soft drink</p>
                 </div>
@@ -114,10 +102,9 @@
                 </div>
             </div>
 
-            <!-- Family Meal -->
             <div class="item broasted bg-white p-6 rounded-[40px] shadow-lg border border-zinc-100 flex flex-col justify-between">
                 <div>
-                    <img src="1.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
+                    <img src="1.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
                     <h3 class="font-heading text-2xl uppercase italic">Family Meal</h3>
                     <p class="text-xs text-zinc-500 font-bold mt-2 leading-relaxed">12 pieces chicken, large fries, large coleslaw, bun and 1.5L soft drink</p>
                 </div>
@@ -127,10 +114,9 @@
                 </div>
             </div>
 
-            <!-- Family Bucket -->
             <div class="item broasted bg-black text-white p-6 rounded-[40px] shadow-2xl border-4 border-yellow-400 flex flex-col justify-between transform hover:-translate-y-2 transition duration-300">
                 <div>
-                    <img src="2.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-800">
+                    <img src="2.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-800">
                     <h3 class="font-heading text-2xl uppercase italic text-yellow-400">Family Bucket</h3>
                     <p class="text-xs text-zinc-300 font-bold mt-2 leading-relaxed">15 pieces chicken, large fries, large coleslaw, bun and 2.25L soft drink</p>
                 </div>
@@ -140,10 +126,9 @@
                 </div>
             </div>
 
-            <!-- Guest Meal -->
             <div class="item broasted bg-black text-white p-6 rounded-[40px] shadow-2xl border-4 border-yellow-400 flex flex-col justify-between transform hover:-translate-y-2 transition duration-300">
                 <div>
-                    <img src="2.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-800">
+                    <img src="2.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-800">
                     <h3 class="font-heading text-2xl uppercase italic text-yellow-400">Guest Meal</h3>
                     <p class="text-xs text-zinc-300 font-bold mt-2 leading-relaxed">20 pieces chicken, large fries, large coleslaw, bun and 2.25L soft drink</p>
                 </div>
@@ -153,10 +138,9 @@
                 </div>
             </div>
 
-            <!-- Party Meal -->
             <div class="item broasted bg-black text-white p-6 rounded-[40px] shadow-2xl border-4 border-yellow-400 flex flex-col justify-between transform hover:-translate-y-2 transition duration-300">
                 <div>
-                    <img src="2.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-800">
+                    <img src="2.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-800">
                     <h3 class="font-heading text-2xl uppercase italic text-yellow-400">Party Meal</h3>
                     <p class="text-xs text-zinc-300 font-bold mt-2 leading-relaxed">24 pieces chicken, large fries, large coleslaw, bun and 2.25L soft drink</p>
                 </div>
@@ -166,10 +150,9 @@
                 </div>
             </div>
 
-            <!-- Broasted Shrimp Meal -->
             <div class="item broasted bg-white p-6 rounded-[40px] shadow-lg border border-zinc-100 flex flex-col justify-between">
                 <div>
-                    <img src="9.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
+                    <img src="9.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
                     <h3 class="font-heading text-2xl uppercase italic">Broasted Shrimp</h3>
                     <p class="text-xs text-zinc-500 font-bold mt-2 leading-relaxed">2 pieces of jumbo broasted shrimp, served with fries, coleslaw, bun & drink</p>
                 </div>
@@ -179,10 +162,9 @@
                 </div>
             </div>
 
-            <!-- Zinger -->
             <div class="item burgers bg-white p-6 rounded-[40px] shadow-lg border border-zinc-100 flex flex-col justify-between">
                 <div>
-                    <img src="11.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
+                    <img src="11.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
                     <h3 class="font-heading text-2xl uppercase italic">Zinger</h3>
                     <p class="text-xs text-zinc-500 font-bold mt-2 leading-relaxed">Crispy Zinger chicken fillet sandwich, served with fries</p>
                 </div>
@@ -192,10 +174,9 @@
                 </div>
             </div>
 
-            <!-- Mighty Zinger -->
             <div class="item burgers bg-white p-6 rounded-[40px] shadow-lg border border-zinc-100 flex flex-col justify-between">
                 <div>
-                    <img src="12.jpg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
+                    <img src="12.jpeg" class="rounded-3xl h-56 w-full object-cover mb-6 shadow-sm border border-zinc-100">
                     <h3 class="font-heading text-2xl uppercase italic">Mighty Zinger</h3>
                     <p class="text-xs text-zinc-500 font-bold mt-2 leading-relaxed">Two juicy zinger chicken fillets topped with cheese and fresh lettuce, served with fries</p>
                 </div>
@@ -209,14 +190,11 @@
     </main>
 
     <script>
-        // --- DATA & STATE ---
         let cart = JSON.parse(localStorage.getItem('zi_cart')) || [];
         const countEl = document.getElementById('cart-count');
 
-        // Update count on load
         if(countEl) countEl.innerText = cart.length;
 
-        // --- ADD TO CART LOGIC ---
         function addToCart(itemName, price) {
             cart.push({ name: itemName, price: price });
             localStorage.setItem('zi_cart', JSON.stringify(cart));
@@ -228,22 +206,18 @@
             }
         }
 
-        // --- FILTER LOGIC ---
         function filterItems(category, event) {
             const items = document.querySelectorAll('.item');
             const buttons = document.querySelectorAll('.filter-btn');
 
-            // Reset buttons
             buttons.forEach(btn => {
                 btn.classList.remove('active', 'bg-yellow-400', 'text-black', 'border-black');
                 btn.classList.add('bg-white', 'text-zinc-400', 'border-zinc-200');
             });
 
-            // Set active button
             event.currentTarget.classList.add('active', 'bg-yellow-400', 'text-black', 'border-black');
             event.currentTarget.classList.remove('bg-white', 'text-zinc-400', 'border-zinc-200');
 
-            // Show/Hide items
             items.forEach(item => {
                 if (category === 'all' || item.classList.contains(category)) {
                     item.style.display = 'flex';
